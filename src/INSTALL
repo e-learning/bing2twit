@@ -1,0 +1,6 @@
+INSTALL
+-------
+1. Put the files to the directory on the web server.
+2. Make sure there is the right path in config.php
+3. Now you can open the project in a browser
+

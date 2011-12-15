@@ -11,6 +11,7 @@
 #include <QXmlDefaultHandler>
 #include <QXmlSimpleReader>
 #include <QList>
+#include <QLabel>
 
 #include "YandexHelper.h"
 #include "twittercli.h"
@@ -28,6 +29,8 @@ private:
     QPushButton * pbSearch;
     QComboBox * comboResults;
     QPushButton * pbSelect;
+    QImage * imageMap;
+    QLabel * imgLabel;
 
     YandexHelper * yandex;
 
@@ -60,6 +63,7 @@ public slots:
 	void oauthLogin();
 	void activateSelect();
 	void processData();
+	void getImage();
 
 private:
 	void initGui();

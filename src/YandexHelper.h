@@ -15,13 +15,14 @@
 class YandexHelper {
 
 public:
-	YandexHelper();
+	YandexHelper() {}
 	virtual ~YandexHelper();
 
 	QString getLocation(QString &object);
-	QString getMap(QString &lat, QString &lng);
+	QString getMap(float lat, float lng);
 
 private:
+
 	QString get(const QString str);
 	static size_t writeData( char *ptr, size_t size, size_t nmemb, std::string *outputBuffer);
 };

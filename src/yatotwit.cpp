@@ -12,6 +12,8 @@ void YaToTwit::initGui(){
 	pbSearch = new QPushButton("Search");
 	comboResults = new QComboBox();
 	pbSelect = new QPushButton("Select");
+	imageMap = new QImage();
+	imgLabel = new QLabel();
 
 	comboResults->setEnabled(false);
 	pbSelect->setEnabled(false);
@@ -24,6 +26,7 @@ void YaToTwit::initGui(){
 
 	mainLayout->addItem(searchLayout);
 	mainLayout->addItem(selectLayout);
+	mainLayout->addWidget(imgLabel);
 
 	QObject::connect(pbSearch, SIGNAL(clicked()), this, SLOT(activateSelect()));
 	QObject::connect(pbSelect, SIGNAL(clicked()), this, SLOT(processData()));
@@ -39,6 +42,8 @@ void YaToTwit::activateSelect(){
 	QXmlInputSource buf;
 	buf.setData(myXml);
 
+	geoObjects.clear();
+
 	XmlHandler * xmlHandler = new XmlHandler(geoObjects);
     reader.setContentHandler(xmlHandler);
 
@@ -46,8 +51,9 @@ void YaToTwit::activateSelect(){
 
     comboResults->clear();
 
-    GeoObject obj;
+    geoObjects = xmlHandler->m_geoObjects;
 
+    GeoObject obj;
     foreach (obj, xmlHandler->m_geoObjects){
     	QString str = QString::fromUtf8(obj.m_name.toStdString().c_str());
     	comboResults->addItem(str);
@@ -72,9 +78,9 @@ bool YaToTwit::XmlHandler::endElement( const QString & namespaceURI, const QStri
 	if(qName == "pos") {
 		if(!m_geoObjects.isEmpty()){
 			QStringList sl = textElement.split(" ");
-			GeoObject go = m_geoObjects.back();
-			go.m_latitude = sl.value(0).toInt();
-			go.m_longtitude = sl.value(1).toInt();
+			//GeoObject go = m_geoObjects.back();
+			m_geoObjects.back().m_latitude = sl.value(0).toFloat();
+			m_geoObjects.back().m_longtitude = sl.value(1).toFloat();
 		}
 	}
 	return true;
@@ -86,7 +92,25 @@ void YaToTwit::oauthLogin(){
 void YaToTwit::processData(){
 	oauthLogin();
 	tAuth.sendTweet(comboResults->currentText());
+
+	getImage();
 }
+
+void YaToTwit::getImage(){
+	GeoObject obj;
+
+	foreach (obj, geoObjects){
+	    QString str = QString::fromUtf8(obj.m_name.toStdString().c_str());
+	    if(str == comboResults->currentText()){
+
+	    	yandex->getMap(obj.m_latitude, obj.m_longtitude);
+	    	imageMap->load("map.png");
+	    	imgLabel->setPixmap(QPixmap::fromImage(*imageMap));
+	    	break;
+	    }
+	}
+}
+
 
 YaToTwit::YaToTwit(QWidget *parent)
     : QWidget(parent)

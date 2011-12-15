@@ -1,0 +1,29 @@
+YaToTwit is an application written for Qt in C++. To build libcurl is required.
+It deals with static API of yandex-maps to get the list of objects corresponding to the entered name of POI. 
+After you choose the suitable place on button press event your POI will be posted to your twitter account using OAuth,
+also a png containing a map of requested place is displayed. 
+
+BUILDING yatotwit
+===============================
+1. Install required libraries
+	cd lib/kqoauth
+	qmake
+	sudo make install
+
+2. Install the target app
+	cd ../../src
+	qmake
+	make
+	./yatotwit
+
+SOURCE CODE
+============================
+
+The source code is available on Github at:
+https://github.com/e-learning/bing2twit
+
+git clone git://github.com/e-learning/bing2twit
+
+AUTHOR
+============================
+Alex A. Renoire
